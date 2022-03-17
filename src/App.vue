@@ -1,32 +1,26 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<div class="con">
+<!-- 路由 -->
+<router-view></router-view>
+<!-- tabbar -->
+<div class="empty"></div>
+<van-tabbar route fixed>
+  <van-tabbar-item replace icon="home-o" to="/home" name="home">首 页</van-tabbar-item>
+  <van-tabbar-item replace icon="clock-o" to="/history" name="history">驾 驶 记 录</van-tabbar-item>
+  <van-tabbar-item replace icon="user-o" to="/user" name="user">用 户</van-tabbar-item>
+</van-tabbar>
+</div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+export default {
+  name: 'APP'
+
 }
+</script>
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+<style lang="less" scoped>
+.empty{
+  height: 50px;
 }
 </style>
