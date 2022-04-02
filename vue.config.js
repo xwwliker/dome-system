@@ -5,5 +5,6 @@ module.exports = {
         target: 'http://47.102.99.215'
       }
     }
-  }
+  },
+  publicPath: './'
 }

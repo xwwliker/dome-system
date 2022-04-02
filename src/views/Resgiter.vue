@@ -13,18 +13,26 @@
  <van-form @submit="onSubmit">
   <van-field
     v-model="username"
-    name="用户名"
-    label="用户名"
-    placeholder="用户名"
-    :rules="[{ required: true, message: '请填写用户名' }]"
+    name="id"
+    label="手机号"
+    placeholder="手机号"
+    :rules="[{ required: true, message: '请输入手机号' }]"
   />
   <van-field
     v-model="password"
     type="password"
-    name="密码"
+    name="password"
     label="密码"
     placeholder="密码"
-    :rules="[{ required: true, message: '请填写密码' }]"
+    :rules="[{ required: true, message: '请输入密码' }]"
+  />
+  <van-field
+    v-model="conpassword"
+    type="password"
+    name="conpassword"
+    label="确认密码"
+    placeholder="确认密码"
+    :rules="[{ required: true, message: '请再次输入密码' }]"
   />
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">注册</van-button>
@@ -36,20 +44,26 @@
 </template>
 
 <script>
+import { Toast } from 'vant'
+import { reqRegister } from '@/api'
 export default {
   name: 'Resgiter',
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      conpassword: ''
     }
   },
   methods: {
     onSubmit (values) {
-      console.log('submit', values)
-    },
-    onClickLeft () {
-      this.$router.back()
+      if (values.password !== values.conpassword) {
+        Toast('密码不一致')
+      } else {
+        reqRegister({ tel: values.id, password: values.password })
+        Toast('注册成功')
+        this.$router.push('/login')
+      }
     }
   }
 }

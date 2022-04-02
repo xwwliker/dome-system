@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bbc">
     <div class="nav">
       车 辆 详 情
     </div>
@@ -27,7 +27,7 @@
 </div> -->
 
 <div class="card" v-for="item in cars" :key="item.id">
-          <van-icon name="logistics"  color="black" />
+          <van-icon name="logistics"  color="black" size="20px"/>
           <div>
             <p>车辆品牌: {{item.type}}</p>
             <p>车牌号: {{item.carNumber}}</p>
@@ -59,9 +59,9 @@ export default {
   computed: {
     ...mapState(['cars'])
   },
-  // created () {
-  //   this.$store.dispatch('getAllCar')
-  // },
+  created () {
+    this.$store.dispatch('getAllCar')
+  },
   watch: {
   },
   methods: {
@@ -77,8 +77,11 @@ export default {
           // on confirm
           reqDelCar([id])
           Toast('删除成功')
-          this.$store.dispatch('getAllCar')
-          this.$router.push('/user')
+          setTimeout(() => {
+            this.$store.dispatch('getAllCar')
+          }, 1000)
+          // this.$store.dispatch('getAllCar')
+          // this.$router.push('/user')
         })
         .catch(() => {
           // on cancel
@@ -98,17 +101,6 @@ export default {
   line-height: 46px;
   color: #fff;
 }
-.car {
-       display: flex;
-       justify-content: space-evenly;
-       align-items: center;
-       margin-top: 1px;
-       img {
-         height: 50px;
-         width: 50px;
-         border-radius: 50%;
-       }
-}
 .card{
       display: flex;
       justify-content: space-between;
@@ -116,11 +108,13 @@ export default {
       border-radius: 10px;
       width: auto;
       height: 60px;
-      padding: 10px;
-      margin-bottom: 5px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
       div{
          display: inline-block;
-         margin-left: -100px;
+         margin-left: -50px;
          p{
            font-size: 14px;
            color: #323233;
@@ -136,7 +130,7 @@ export default {
           color: #fff;
           font-size: 14px;
 }
-       background-color: #FAFAFA;
+       background-color: #fff;
 }
 
 .button{
@@ -148,6 +142,12 @@ export default {
   background-color: #007BFF;
   border: #007BFF;
   border-radius: 30px;
+}
+.bbc{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #f1f9ffb6;
 }
 
 </style>

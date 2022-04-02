@@ -3,7 +3,7 @@
        <div class="user-card">
          <van-cell>
            <template #icon>
-             <img :src="userinfo.headPortrait" alt="" class="avatar" v-if="userinfo!=={}"/>
+                <img :src="userinfo.headPortrait" alt="" class="avatar" v-if="userinfo!=={}"/>
            </template>
            <template #title>
              <span class="username" v-if="!userinfo.nickname">用户名</span>
@@ -14,17 +14,10 @@
            </template>
          </van-cell>
        </div>
-
-        <!-- <div class="car">
-          <div class="img"><router-link to="/user/detail1"><img src="@/assets/car1.png"/><p>汽车</p></router-link></div>
-          <div class="img"><router-link to="/user/detail2"><img src="@/assets/car2.png"/><p>电动汽车</p></router-link></div>
-          <div class="img"><router-link to="/user/detail3"><img src="@/assets/car3.png"/><p>小货车</p></router-link></div>
-          <div class="img"><router-link to="/user/detail4"><img src="@/assets/more.png"/><p>更多</p></router-link></div>
-        </div> -->
         <br>
         <div class="card-contain">
         <router-link to='/userdetail'>
-          <div class="card">
+          <div class="card" style="background-image: linear-gradient(to bottom right, #38dfc8, #38dfc8af);">
           <van-icon name="contact" size="30px" color="#fff"/>
           <br>
           <div><p>个人信息</p>
@@ -33,7 +26,7 @@
         </div>
         </router-link>
         <router-link to='/car/cardetail'>
-          <div class="card" style=" background-color: #199fff">
+          <div class="card" style=" background-image: linear-gradient(to bottom right, #199fff, #1dafffaf);">
           <van-icon name="logistics" size="30px" color="#fff" />
           <br>
           <div>
@@ -42,6 +35,26 @@
           </div>
         </div>
         </router-link>
+        <router-link to="/cardev">
+          <div class="card" style="background-image: linear-gradient(to bottom right,  rgb(230, 104, 104), rgba(230, 104, 104,0.7));">
+          <van-icon name="desktop-o" size="30px" color="#fff"/>
+          <br>
+          <div><p>车载设备</p>
+          <p v-if="userinfo.name">ZN-812</p>
+          </div>
+        </div>
+        </router-link>
+
+        <router-link to="/movdev">
+          <div class="card" style="background-image: linear-gradient(to bottom right,  rgb(244, 177, 131), rgba(244, 177, 131,0.7));">
+          <van-icon name="service-o" size="30px" color="#fff"/>
+          <br>
+          <div><p>可穿戴设备</p>
+          <p v-if="userinfo.name">小米手环6</p>
+          </div>
+        </div>
+        </router-link>
+
        </div>
        <br>
        <van-cell-group class="action-card">
@@ -65,19 +78,18 @@ export default {
   computed: {
     ...mapState(['token', 'cars', 'userinfo'])
   },
-  watch: {
-    token () {
-      this.$store.dispatch('getAllCar')
-      this.$store.dispatch('getLastUserHealth')
-      this.$store.dispatch('GetUser')
-      this.$store.dispatch('getDrivingInformationByTime', { beginTimeS: '2022-01-01 00:00:00', endTimeS: '2022-01-08 00:00:00' })
-      this.islogin = true
-    }
-  },
   mounted () {
     if (this.token.length !== 0) {
+      this.$store.dispatch('getLastUserHealth')
+      this.$store.dispatch('GetUser')
       this.$store.dispatch('getAllCar')
+      this.$store.dispatch('getDrivingInformationByTime', { beginTimeS: '2022-01-21 00:00:00', endTimeS: '2022-01-28 00:00:00' })
+      this.$store.dispatch('getDrivingInformationByTimeMonth', { beginTimeS: '2022-01-01 00:00:00', endTimeS: '2022-02-01 00:00:00' })
+      this.$store.dispatch('getDrivingInformationLast')
       this.islogin = true
+      if (this.userinfo.nickname === '') {
+        this.$router.push('/userdetail')
+      }
     }
   }
 }
@@ -104,7 +116,7 @@ export default {
            margin-right: 10px;
          }
          .username {
-           font-size: 14px;
+           font-size: 17px;
            font-weight: bold;
          }
        }
@@ -134,14 +146,16 @@ export default {
      }
      .card-contain{
        display: flex;
+       flex-wrap: wrap;
        justify-content: space-around;
      }
      .card{
        display: inline-block;
        border-radius: 10px;
-       width: 100px;
-       height: 100px;
+       width: 120px;
+       height: 120px;
        padding: 10px;
+       margin: 10px 0;
        img{
          display: inline-block;
          width: 60px;
@@ -149,11 +163,10 @@ export default {
        div{
          display: inline-block;
          p{
-           font-size: 10px;
+           font-size: 14px;
            color: #fff;
          }
        }
-       background-color: #12d1b6;
      }
    }
 </style>

@@ -34,8 +34,11 @@ export default {
   methods: {
     onSave () {
       reqaddCar({ type: this.type, carNumber: this.carNumber })
+      setTimeout(() => {
+        this.$store.dispatch('getAllCar')
+        this.$router.replace('/car/cardetail')
+      }, 1000)
       Toast('保存成功')
-      this.$router.replace('/user')
     }
 
   }

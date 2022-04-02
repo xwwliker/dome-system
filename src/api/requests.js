@@ -12,7 +12,7 @@ const requests = axios.create({
 requests.interceptors.request.use(config => {
   // config内主要是对请求头Header配置
   // 比如添加token
-  if (store.state.token) {
+  if (store.state.token !== '') {
     config.headers.authorization = store.state.token
   }
   nprogress.start()

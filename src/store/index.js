@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationByDay, reqDrivingInformationByTime } from '@/api'
+import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationlast, reqDrivingInformationByTime } from '@/api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -10,8 +10,8 @@ export default new Vuex.Store({
     emergencys: [],
     health: [],
     userinfo: {},
-    timeHistory: [],
-    dayHistory: []
+    weekHistory: [],
+    lastHistory: {}
   },
   mutations: {
     ADDToken (state, token) {
@@ -29,19 +29,24 @@ export default new Vuex.Store({
     GETUSER (state, obj) {
       state.userinfo = obj
     },
-    GETDRIVINGHISTORYBYDAY (state, obj) {
-      obj.forEach(function (item) {
-        item.begin = item.begin.replace('T', ' ')
-        item.end = item.end.replace('T', ' ')
-      })
-      state.dayHistory = obj
+    GETDRIVINGHISTORYLAST (state, obj) {
+      obj.drivingInformation.begin = obj.drivingInformation.begin.replace('T', ' ')
+      obj.drivingInformation.end = obj.drivingInformation.end.replace('T', ' ')
+      state.lastHistory = obj
     },
     GETDRIVINGHISTORYBYTIME (state, obj) {
       obj.forEach(function (item) {
-        item.begin = item.begin.replace('T', ' ')
-        item.end = item.end.replace('T', ' ')
+        item.drivingInformation.begin = item.drivingInformation.begin.replace('T', ' ')
+        item.drivingInformation.end = item.drivingInformation.end.replace('T', ' ')
       })
-      state.timeHistory = obj
+      state.weekHistory = obj
+    },
+    GETDRIVINGHISTORYBYTIMEMONTH (state, obj) {
+      obj.forEach(function (item) {
+        item.drivingInformation.begin = item.drivingInformation.begin.replace('T', ' ')
+        item.drivingInformation.end = item.drivingInformation.end.replace('T', ' ')
+      })
+      state.monthHistory = obj
     }
   },
   actions: {
@@ -75,16 +80,22 @@ export default new Vuex.Store({
         commit('GETUSER', result.obj)
       }
     },
-    async getDrivingInformationByDay ({ commit }, beginTimeS) {
-      const result = await reqDrivingInformationByDay(beginTimeS)
+    async getDrivingInformationLast ({ commit }) {
+      const result = await reqDrivingInformationlast()
       if (result.status === 200) {
-        commit('GETDRIVINGHISTORYBYDAY', result.obj)
+        commit('GETDRIVINGHISTORYLAST', result.obj)
       }
     },
     async getDrivingInformationByTime ({ commit }, params) {
       const result = await reqDrivingInformationByTime(params)
       if (result.status === 200) {
         commit('GETDRIVINGHISTORYBYTIME', result.obj)
+      }
+    },
+    async getDrivingInformationByTimeMonth ({ commit }, params) {
+      const result = await reqDrivingInformationByTime(params)
+      if (result.status === 200) {
+        commit('GETDRIVINGHISTORYBYTIMEMONTH', result.obj)
       }
     },
     async DelCarById ({ commit }, id) {
@@ -116,6 +127,20 @@ export default new Vuex.Store({
         heartbeats.push(item.heartbeat)
       })
       return heartbeats
+    },
+    closeEye (state) {
+      var closeEye = []
+      state.weekHistory.forEach(function (item) {
+        closeEye.push(item.drivingInformation.closeEye)
+      })
+      return closeEye
+    },
+    attention (state) {
+      var attention = []
+      state.weekHistory.forEach(function (item) {
+        attention.push(item.drivingInformation.attention)
+      })
+      return attention
     }
   }
 })

@@ -14,10 +14,10 @@
  <van-form @submit="onSubmit">
   <van-field
     v-model="username"
-    name="用户名"
-    label="用户名"
-    placeholder="用户名"
-    :rules="[{ required: true, message: '请填写用户名' }]"
+    name="手机号"
+    label="手机号"
+    placeholder="手机号"
+    :rules="[{ required: true, message: '请填写手机号' }]"
   />
   <van-field
     v-model="password"
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { reqToken } from '@/api'
+import { Toast } from 'vant'
 export default {
 
   name: 'Login',
@@ -50,9 +52,18 @@ export default {
     }
   },
   methods: {
-    onSubmit (values) {
-      this.$store.dispatch('getToken', { username: this.username, password: this.password })
-      this.$router.replace('/user')
+    async onSubmit (values) {
+      const result = await reqToken(this.username, this.password)
+      if (result.status === 200) {
+        this.$store.commit('ADDToken', result.obj)
+        setTimeout(() => {
+          this.$store.dispatch('GetUser')
+          this.$router.push('/user')
+        }, 1000)
+      } else {
+        this.password = ''
+        Toast('密码或手机号错误')
+      }
     }
   }
 }
