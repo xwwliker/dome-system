@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationlast, reqDrivingInformationByTime } from '@/api'
+import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationlast, reqDrivingInformationByTime, reqgetHealthByTime } from '@/api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -9,6 +9,9 @@ export default new Vuex.Store({
     cars: [],
     emergencys: [],
     health: [],
+    dayHealth: [],
+    weekHealth: [],
+    monthHealth: [],
     userinfo: {},
     weekHistory: [],
     lastHistory: {}
@@ -24,29 +27,130 @@ export default new Vuex.Store({
       state.emergencys = obj
     },
     GETLASTUSERHEALTH (state, obj) {
+      obj[0].forEach((item) => {
+        item.time = item.time.replace('T', ' ')
+      })
       state.health = obj
     },
     GETUSER (state, obj) {
       state.userinfo = obj
     },
     GETDRIVINGHISTORYLAST (state, obj) {
-      obj.drivingInformation.begin = obj.drivingInformation.begin.replace('T', ' ')
-      obj.drivingInformation.end = obj.drivingInformation.end.replace('T', ' ')
+      obj.begin = obj.begin.replace('T', ' ')
+      obj.end = obj.end.replace('T', ' ')
       state.lastHistory = obj
     },
     GETDRIVINGHISTORYBYTIME (state, obj) {
-      obj.forEach(function (item) {
-        item.drivingInformation.begin = item.drivingInformation.begin.replace('T', ' ')
-        item.drivingInformation.end = item.drivingInformation.end.replace('T', ' ')
-      })
-      state.weekHistory = obj
+      if (obj === null) state.weekHistory = []
+      else {
+        obj.forEach(function (p) {
+          p.forEach(function (item) {
+            item.begin = item.begin.replace('T', ' ')
+            item.end = item.end.replace('T', ' ')
+          })
+        })
+        state.weekHistory = obj
+      }
     },
     GETDRIVINGHISTORYBYTIMEMONTH (state, obj) {
-      obj.forEach(function (item) {
-        item.drivingInformation.begin = item.drivingInformation.begin.replace('T', ' ')
-        item.drivingInformation.end = item.drivingInformation.end.replace('T', ' ')
-      })
-      state.monthHistory = obj
+      if (obj === null) state.monthHistory = []
+      else {
+        obj.forEach(function (p) {
+          p.forEach(function (item) {
+            item.begin = item.begin.replace('T', ' ')
+            item.end = item.end.replace('T', ' ')
+          })
+        })
+        state.monthHistory = obj
+      }
+    },
+    GETDAYHEALTH (state, obj) {
+      if (obj === null) state.dayHealth = []
+      else {
+        state.dayHealth = obj
+      }
+    },
+    GETWEEKHEALTH (state, obj) {
+      if (obj === null) state.weekHealth = []
+      else {
+        var temp = []
+        obj.forEach((p) => {
+          var avgbloodOxygen = 0
+          var avgheartbeat = 0
+          var avgtemperature = 0
+          var maxbloodOxygen = -1e9
+          var maxheartbeat = -1e9
+          var maxtemperature = -1e9
+          var minbloodOxygen = 1e9
+          var minheartbeat = 1e9
+          var mintemperature = 1e9
+          p.forEach((item) => {
+            avgbloodOxygen += Number(item.bloodOxygen)
+            avgheartbeat += Number(item.heartbeat)
+            avgtemperature += Number(item.temperature)
+            maxbloodOxygen = Math.max(maxbloodOxygen, Number(item.bloodOxygen))
+            maxheartbeat = Math.max(maxheartbeat, Number(item.heartbeat))
+            maxtemperature = Math.max(maxtemperature, Number(item.temperature))
+            minbloodOxygen = Math.min(minbloodOxygen, Number(item.bloodOxygen))
+            minheartbeat = Math.min(minheartbeat, Number(item.heartbeat))
+            mintemperature = Math.min(mintemperature, Number(item.temperature))
+          })
+          var t = {}
+          t.avgbloodOxygen = (avgbloodOxygen / p.length).toFixed(2)
+          t.avgheartbeat = (avgheartbeat / p.length).toFixed(2)
+          t.avgtemperature = (avgtemperature / p.length).toFixed(2)
+          t.maxbloodOxygen = maxbloodOxygen
+          t.maxheartbeat = maxheartbeat
+          t.maxtemperature = maxtemperature
+          t.minbloodOxygen = minbloodOxygen
+          t.minheartbeat = minheartbeat
+          t.mintemperature = mintemperature
+          t.time = p[0].time.substring(0, 10)
+          temp.push(t)
+        })
+        state.weekHealth = temp
+      }
+    },
+    GETMONTHHEALTH (state, obj) {
+      if (obj === null) state.monthHealth = []
+      else {
+        var temp = []
+        obj.forEach((p) => {
+          var avgbloodOxygen = 0
+          var avgheartbeat = 0
+          var avgtemperature = 0
+          var maxbloodOxygen = -1e9
+          var maxheartbeat = -1e9
+          var maxtemperature = -1e9
+          var minbloodOxygen = 1e9
+          var minheartbeat = 1e9
+          var mintemperature = 1e9
+          p.forEach((item) => {
+            avgbloodOxygen += Number(item.bloodOxygen)
+            avgheartbeat += Number(item.heartbeat)
+            avgtemperature += Number(item.temperature)
+            maxbloodOxygen = Math.max(maxbloodOxygen, Number(item.bloodOxygen))
+            maxheartbeat = Math.max(maxheartbeat, Number(item.heartbeat))
+            maxtemperature = Math.max(maxtemperature, Number(item.temperature))
+            minbloodOxygen = Math.min(minbloodOxygen, Number(item.bloodOxygen))
+            minheartbeat = Math.min(minheartbeat, Number(item.heartbeat))
+            mintemperature = Math.min(mintemperature, Number(item.temperature))
+          })
+          var t = {}
+          t.avgbloodOxygen = (avgbloodOxygen / p.length).toFixed(2)
+          t.avgheartbeat = (avgheartbeat / p.length).toFixed(2)
+          t.avgtemperature = (avgtemperature / p.length).toFixed(2)
+          t.maxbloodOxygen = maxbloodOxygen
+          t.maxheartbeat = maxheartbeat
+          t.maxtemperature = maxtemperature
+          t.minbloodOxygen = minbloodOxygen
+          t.minheartbeat = minheartbeat
+          t.mintemperature = mintemperature
+          t.time = p[0].time.substring(0, 10)
+          temp.push(t)
+        })
+        state.monthHealth = temp
+      }
     }
   },
   actions: {
@@ -91,6 +195,27 @@ export default new Vuex.Store({
       if (result.status === 200) {
         commit('GETDRIVINGHISTORYBYTIME', result.obj)
       }
+      if (result.msg === 'is empty') {
+        commit('GETDRIVINGHISTORYBYTIME', result.obj)
+      }
+    },
+    async getDayHealth ({ commit }, params) {
+      const result = await reqgetHealthByTime(params)
+      if (result.status === 200) {
+        commit('GETDAYHEALTH', result.obj)
+      }
+    },
+    async getWeekHealth ({ commit }, params) {
+      const result = await reqgetHealthByTime(params)
+      if (result.status === 200) {
+        commit('GETWEEKHEALTH', result.obj)
+      }
+    },
+    async getMonthHealth ({ commit }, params) {
+      const result = await reqgetHealthByTime(params)
+      if (result.status === 200) {
+        commit('GETMONTHHEALTH', result.obj)
+      }
     },
     async getDrivingInformationByTimeMonth ({ commit }, params) {
       const result = await reqDrivingInformationByTime(params)
@@ -109,38 +234,53 @@ export default new Vuex.Store({
   getters: {
     bloodOxygen (state) {
       var bloodOxygens = []
-      state.health.forEach(function (item) {
+      state.health[0].forEach(function (item) {
         bloodOxygens.push(item.bloodOxygen)
       })
       return bloodOxygens
     },
     temperature (state) {
       var temperatures = []
-      state.health.forEach(function (item) {
+      state.health[0].forEach(function (item) {
         temperatures.push(item.temperature)
       })
       return temperatures
     },
     heartbeat (state) {
       var heartbeats = []
-      state.health.forEach(function (item) {
+      state.health[0].forEach(function (item) {
         heartbeats.push(item.heartbeat)
       })
       return heartbeats
     },
     closeEye (state) {
       var closeEye = []
-      state.weekHistory.forEach(function (item) {
-        closeEye.push(item.drivingInformation.closeEye)
+
+      state.weekHistory.forEach(function (p) {
+        p.forEach(function (item) {
+          closeEye.push(item.closeEye)
+        })
       })
+
       return closeEye
     },
     attention (state) {
       var attention = []
-      state.weekHistory.forEach(function (item) {
-        attention.push(item.drivingInformation.attention)
+      state.weekHistory.forEach(function (p) {
+        p.forEach(function (item) {
+          attention.push(item.attention)
+        })
       })
       return attention
+    },
+    yawn (state) {
+      var yawn = []
+      state.weekHistory.forEach(function (p) {
+        p.forEach(function (item) {
+          yawn.push(item.yawn)
+        })
+      })
+      return yawn
     }
   }
 })

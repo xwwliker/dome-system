@@ -26,3 +26,5 @@ export const reqDrivingInformationByTime = (params) => requests({ url: `/peach/d
 export const reqDrivingInformationlast = () => requests({ url: '/peach/drivingInformation/getDrivingInformationLast', method: 'get' })
 // /peach/user/uploadPortrait
 export const reqUploadPortrait = (file) => requests({ url: '/peach/user/uploadPortrait', method: 'post', file })
+// /peach/health/getHealthByTime?beginTimeS=2022-03-08 12:31:00&endTimeS=2022-03-08 12:43:00
+export const reqgetHealthByTime = (params) => requests({ url: `/peach/health/getHealthByTime?beginTimeS=${params.beginTimeS}&endTimeS=${params.endTimeS}`, method: 'get' })

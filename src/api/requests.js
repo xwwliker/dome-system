@@ -1,6 +1,5 @@
 import axios from 'axios'
-import nprogress from 'nprogress'
-import 'nprogress/nprogress.css'
+
 import store from '@/store'
 // 1、对axios二次封装
 const requests = axios.create({
@@ -15,13 +14,11 @@ requests.interceptors.request.use(config => {
   if (store.state.token !== '') {
     config.headers.authorization = store.state.token
   }
-  nprogress.start()
   return config
 })
 // 3、配置相应拦截器
 requests.interceptors.response.use((res) => {
   // 成功的回调函数
-  nprogress.done()
   return res.data
 }, (error) => {
   // 失败的回调函数

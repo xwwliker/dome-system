@@ -8,10 +8,22 @@
           <van-icon name="underway" size="30px" color="#fff"/>
           <br>
           <div>
-            <p>眨眼次数：</p> <p style="float: right">{{this.$route.params.obj.drivingInformation.closeEye}}次</p>
+            <p>驾驶时长：</p> <p style="float: right">{{this.drivingtime}}分钟</p>
+            <van-divider/>
             <br>
-            <p style="float: right">{{this.$route.params.obj.drivingInformation.attention}}次</p>
+            <p>眨眼次数：</p> <p style="float: right">{{this.$route.params.obj.closeEye}}次</p>
+            <br>
+            <p style="float: right">{{this.$route.params.obj.attention}}次</p>
             <p>注意力不集中次数：</p>
+            <br>
+            <p style="float: right">{{this.$route.params.obj.yawn}}次</p>
+            <p>打哈欠次数：</p>
+            <br>
+            <p style="float: right">{{this.$route.params.obj.startLatitude}}° N {{this.$route.params.obj.startLongitude}}° E</p>
+            <p>起始位置：</p>
+            <br>
+            <p style="float: right">{{this.$route.params.obj.endLatitude}}° N {{this.$route.params.obj.endLongitude}}° E</p>
+            <p>结束位置：</p>
           </div>
     </div>
 
@@ -25,12 +37,16 @@ export default {
   name: 'historydetail',
   data () {
     return {
+      drivingtime: 0
     }
   },
   created () {
     this.$nextTick(function () {
       this.drawLine()
     })
+    var begin = new Date(this.$route.params.obj.begin)
+    var end = new Date(this.$route.params.obj.end)
+    this.drivingtime = (end - begin) / 1000 / 60
   },
   methods: {
     drawLine () {
@@ -44,12 +60,16 @@ export default {
             type: 'pie',
             data: [
               {
-                value: this.$route.params.obj.drivingInformation.closeEye,
+                value: this.$route.params.obj.closeEye,
                 name: '眨眼'
               },
               {
-                value: this.$route.params.obj.drivingInformation.attention,
+                value: this.$route.params.obj.attention,
                 name: '注意力分散'
+              },
+              {
+                value: this.$route.params.obj.yawn,
+                name: '打哈欠'
               }
             ],
             radius: '40%'
@@ -74,7 +94,6 @@ export default {
 }
 .card{
        border-radius: 10px;
-       height: 120px;
        padding: 10px;
        margin: 10px;
        img{
