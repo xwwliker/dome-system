@@ -8,14 +8,14 @@
     </div> -->
     <br>
     <div class="calendar">
-      <p @click="previousweek">上一周</p>
+      <p @click="previousweek" >上一周</p>
       <p @click="show = true" class="date">{{this.startday}}~{{this.endday}}</p>
       <p @click="nextweek">下一周</p>
     </div>
-
+    <br>
     <van-calendar v-model="show"  @confirm="onConfirm" color='#007bffd5' :min-date="minDate" :max-date="maxDate"/>
     <div class="showcard">
-      <span @click="$router.push('./weekhistory')">
+      <span>
         <p v-if="this.weekHistory.length">{{weekHistory.length}}天</p>
         <p class="min">本周驾驶天数</p>
       </span>
@@ -25,15 +25,12 @@
       </span>
     </div>
     <div class="warn">
-      本周系统已保障您的安全{{this.safetime}}分钟，期间您闭眼{{this.eyesum}}次，您注意力不集中{{this.attentionsum}}次
+      本周系统已保障您的安全{{this.safetime}}分钟，期间您闭眼{{this.eyesum}}次，您注意力不集中{{this.attentionsum}}次,您打哈欠{{this.yawnsum}}次
     </div>
     <br>
     <div>
       <div id="main" :style="{width: '100%', height: '300px'}"></div>
     </div>
-    <!-- <div class="title" v-if="weekHistory.length!=0">
-      <p>本周驾驶记录</p>
-    </div> -->
     <div style="margin: 10px">
       <span @click="prepage">上一页</span>
       <span @click="nextpage" style="float: right">下一页</span>
@@ -300,7 +297,11 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 0 10px;
+  padding: 0 10px;
+  background-color: rgb(237, 237, 237);
+  border-radius: 20px;
   .date{
+    line-height: 21px;
     font-size: 15px;
   }
 }

@@ -17,8 +17,9 @@
 
 <script>
 export default {
-  name: 'APP'
-
+  name: 'APP',
+  methods: {
+  }
 }
 </script>
 

@@ -41,9 +41,9 @@
       </div>
       </div>
       <div class="box" @click="goAlcohol">
-      <div class="img"><img src="@/assets/a-winejiu.png"/></div>
+      <div class="img"><img src="@/assets/tizhong.png"/></div>
       <div class="img" v-if="bloodOxygen.length !== 0">
-        <p>酒精 ： 0</p>
+        <p>体重 ： 80.3 Kg</p>
         <p style="font-size:13px;color:rgb(107, 110, 112);">时间:{{health[0][0].time}}</p>
       </div>
       <div class="button">

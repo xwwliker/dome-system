@@ -105,7 +105,7 @@ export default new Vuex.Store({
           t.minbloodOxygen = minbloodOxygen
           t.minheartbeat = minheartbeat
           t.mintemperature = mintemperature
-          t.time = p[0].time.substring(0, 10)
+          t.time = p[0].time.substring(5, 10)
           temp.push(t)
         })
         state.weekHealth = temp

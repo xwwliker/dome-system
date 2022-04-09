@@ -490,25 +490,25 @@ export default {
         avgdata.push(p.avgheartbeat)
         maxdata.push(p.maxheartbeat)
         mindata.push(p.minheartbeat)
-        this.chart.setOption({
-          xAxis: {
-            data: date
+      })
+      this.chart.setOption({
+        xAxis: {
+          data: date
+        },
+        series: [
+          {
+            nmae: 'avg',
+            data: avgdata
           },
-          series: [
-            {
-              nmae: 'avg',
-              data: avgdata
-            },
-            {
-              nmae: 'max',
-              data: maxdata
-            },
-            {
-              nmae: 'min',
-              data: mindata
-            }
-          ]
-        })
+          {
+            nmae: 'max',
+            data: maxdata
+          },
+          {
+            nmae: 'min',
+            data: mindata
+          }
+        ]
       })
     },
     monthHealth () {

@@ -37,12 +37,20 @@ const routes = [
   { path: '/health/bloodoxygen', component: bloodOxygen },
   { path: '/car/addcar', component: AddCar },
   { path: '/historydetail/:id', component: HistoryDetail, name: 'historydetail' }
-
 ]
 
 const router = new VueRouter({
   routes,
-  mode: 'hash'
+  mode: 'history'
 })
 
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  if (to.path === '/home') {
+    sessionStorage.quit = 1
+  } else {
+    sessionStorage.quit = 0
+  }
+  next()
+})
 export default router

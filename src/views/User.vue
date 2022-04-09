@@ -83,9 +83,6 @@ export default {
       this.$store.dispatch('getLastUserHealth')
       this.$store.dispatch('GetUser')
       this.$store.dispatch('getAllCar')
-      // this.$store.dispatch('getDrivingInformationByTime', { beginTimeS: '2022-01-21 00:00:00', endTimeS: '2022-01-28 00:00:00' })
-      // this.$store.dispatch('getDrivingInformationByTimeMonth', { beginTimeS: '2022-01-01 00:00:00', endTimeS: '2022-02-01 00:00:00' })
-      // this.$store.dispatch('getDrivingInformationLast')
       this.islogin = true
       if (this.userinfo.nickname === '') {
         this.$router.push('/userdetail')

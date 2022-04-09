@@ -491,25 +491,25 @@ export default {
         avgdata.push(p.avgbloodOxygen)
         maxdata.push(p.maxbloodOxygen)
         mindata.push(p.minbloodOxygen)
-        this.chart.setOption({
-          xAxis: {
-            data: date
+      })
+      this.chart.setOption({
+        xAxis: {
+          data: date
+        },
+        series: [
+          {
+            nmae: 'avg',
+            data: avgdata
           },
-          series: [
-            {
-              nmae: 'avg',
-              data: avgdata
-            },
-            {
-              nmae: 'max',
-              data: maxdata
-            },
-            {
-              nmae: 'min',
-              data: mindata
-            }
-          ]
-        })
+          {
+            nmae: 'max',
+            data: maxdata
+          },
+          {
+            nmae: 'min',
+            data: mindata
+          }
+        ]
       })
     },
     monthHealth () {
@@ -518,14 +518,14 @@ export default {
       this.monthHealth.forEach((p) => {
         date.push(p.time)
         data.push(p.avgbloodOxygen)
-        this.chart.setOption({
-          xAxis: {
-            data: date
-          },
-          series: [
-            { data: data }
-          ]
-        })
+      })
+      this.chart.setOption({
+        xAxis: {
+          data: date
+        },
+        series: [
+          { data: data }
+        ]
       })
     }
   }
@@ -575,6 +575,7 @@ export default {
   justify-content: space-between;
   margin: 0 10px;
   .date{
+    line-height: 21px;
     font-size: 15px;
   }
 }

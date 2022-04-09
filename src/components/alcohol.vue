@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="nav">
-      酒 精
+      体 重
     </div>
   <div id="main" :style="{width: '100%', height: '300px'}"></div>
 
@@ -9,10 +9,13 @@
           <van-icon name="bar-chart-o" size="30px" color="#fff"/>
           <br>
           <div>
-            <p>本次最高：</p> <p style="float: right">1</p>
+            <p>最高：</p> <p style="float: right">80.2Kg</p>
             <br>
-            <p style="float: right">2</p>
-            <p>本次最低：</p>
+            <p>最低：</p> <p style="float: right">78.9Kg</p>
+            <br>
+            <p>身体指数：</p> <p style="float: right">23.5</p>
+            <br>
+            <p>建议体重：</p> <p style="float: right">75.9Kg</p>
           </div>
     </div>
 </div>
@@ -36,11 +39,10 @@ export default {
       var myChart = echarts.init(chartDom)
       var option
 
-      var date = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-      var data = this.bloodOxygen || []
+      var date = ['2022-01-17', '2022-01-18', '2022-01-21', '2022-01-23', '2022-01-25', '2022-01-30', '2022-02-02']
+      var data = [80.0, 80.2, 79.8, 79.5, 79.0, 79.1, 78.9]
       option = {
         title: {
-          text: this.lastHistory.drivingInformation.end.substring(0, 10)
         },
         xAxis: {
           type: 'category',
@@ -63,6 +65,9 @@ export default {
             name: '酒精',
             type: 'line',
             symbol: 'none',
+            lineStyle: {
+              color: 'rgb(244, 177, 131)'
+            },
             itemStyle: {
               normal: { label: { show: true } }
             },
@@ -85,7 +90,6 @@ export default {
 <style lang="less" scoped>
 .card{
        border-radius: 10px;
-       height: 120px;
        padding: 10px;
        margin: 10px;
        img{
