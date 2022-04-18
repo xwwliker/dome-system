@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationlast, reqDrivingInformationByTime, reqgetHealthByTime } from '@/api'
+import { reqToken, reqAllCar, reqEmergency, reqDelCar, reqLastUserHealth, reqGetUser, reqDrivingInformationlast, reqDrivingInformationByTime, reqgetHealthByTime, reqgetAllBmi } from '@/api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -14,9 +14,23 @@ export default new Vuex.Store({
     monthHealth: [],
     userinfo: {},
     weekHistory: [],
-    lastHistory: {}
+    lastHistory: {},
+    bmi: []
   },
   mutations: {
+    reset (state) {
+      state.token = ''
+      state.cars = []
+      state.emergencys = []
+      state.health = []
+      state.dayHealth = []
+      state.weekHealth = []
+      state.monthHealth = []
+      state.userinfo = {}
+      state.weekHistory = []
+      state.lastHistory = {}
+      state.bmi = []
+    },
     ADDToken (state, token) {
       state.token = token
     },
@@ -39,6 +53,14 @@ export default new Vuex.Store({
       obj.begin = obj.begin.replace('T', ' ')
       obj.end = obj.end.replace('T', ' ')
       state.lastHistory = obj
+    },
+    GETALLBMI (state, obj) {
+      obj.forEach((item) => {
+        if (item.time !== null) {
+          item.time = item.time.substring(0, 10)
+        }
+      })
+      state.bmi = obj
     },
     GETDRIVINGHISTORYBYTIME (state, obj) {
       if (obj === null) state.weekHistory = []
@@ -65,8 +87,11 @@ export default new Vuex.Store({
       }
     },
     GETDAYHEALTH (state, obj) {
-      if (obj === null) state.dayHealth = []
+      if (obj.length === 0 || obj === null) state.dayHealth = []
       else {
+        obj[0].forEach(item => {
+          item.time = item.time.replace('T', ' ')
+        })
         state.dayHealth = obj
       }
     },
@@ -226,6 +251,12 @@ export default new Vuex.Store({
     async DelCarById ({ commit }, id) {
       const result = await reqDelCar(id)
       if (result.status === 200) {
+      }
+    },
+    async getAllBmi ({ commit }) {
+      const result = await reqgetAllBmi()
+      if (result.status === 200) {
+        commit('GETALLBMI', result.obj)
       }
     }
   },

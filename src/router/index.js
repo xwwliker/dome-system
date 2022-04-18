@@ -10,12 +10,13 @@ import Userdetail from '@/views/userdetail.vue'
 import AddCar from '@/views/AddCar.vue'
 import HistoryDetail from '@/views/historyDetail.vue'
 import WeekHistory from '@/views/weekHistory.vue'
-import Alcohol from '@/components/alcohol.vue'
+import Bmi from '@/components/bmi.vue'
 import bloodOxygen from '@/components/blood.vue'
 import Temperature from '@/components/temperature.vue'
 import Heartbeat from '@/components/heartbeat.vue'
 import CarDev from '@/views/carDev.vue'
 import MovDev from '@/views/movDev.vue'
+import HealthReport from '@/views/healthReport.vue'
 
 Vue.use(VueRouter)
 
@@ -28,10 +29,11 @@ const routes = [
   { path: '/userdetail', component: Userdetail },
   { path: '/cardev', component: CarDev },
   { path: '/movdev', component: MovDev },
+  { path: '/health/healthReport', component: HealthReport },
   { path: '/home', component: Home },
   { path: '/car/cardetail', component: Cardetail },
   { path: '/weekhistory', component: WeekHistory },
-  { path: '/health/alcohol', component: Alcohol },
+  { path: '/health/bmi', component: Bmi },
   { path: '/health/temperature', component: Temperature },
   { path: '/health/heartbeat', component: Heartbeat },
   { path: '/health/bloodoxygen', component: bloodOxygen },
@@ -53,4 +55,5 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+router.afterEach(() => { document.body.scrollTop = 0; document.documentElement.scrollTop = 0 })
 export default router

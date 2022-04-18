@@ -3,27 +3,66 @@
     <div class="nav">
       可 穿 戴 设 备 详 情
     </div>
+    <br>
     <div class="card">
           <van-icon name="service-o"  color="black" size="20px" />
           <div>
-            <p>设备品牌: 小米</p>
-            <p>设备型号: 小米手环6</p>
+            <p>设备品牌: 安徒生手环</p>
+            <p>设备ID: {{id}}</p>
           </div>
           <van-icon name="cross"/>
 
 </div>
   <div>
     <br>
-      <van-button round type="primary" size="normal" color="#007BFF" block>新增设备</van-button>
-      <!-- <br>
-      <van-button round type="primary" size="normal" color="red" block @click="Dialog">删除</van-button> -->
+      <div style="margin: 0 10px">
+        <van-button round type="primary" size="normal" color="#007BFF" block @click="showpo">更换设备</van-button>
+      </div>
   </div>
+  <van-popup v-model="show" round>
+    <div class="popup">
+      <p>更换绑定手环</p>
+        <br>
+        <van-field v-model="value" placeholder="请输入id" />
+        <br>
+      <van-button round block type="info" native-type="submit" @click="onSubmit">提交</van-button>
+    </div>
+  </van-popup>
   </div>
 </template>
 
 <script>
+import { reqgetBracelet, reqbindBracelet } from '@/api'
 export default {
-
+  data () {
+    return {
+      id: '',
+      show: false,
+      value: ''
+    }
+  },
+  created () {
+    var res = reqgetBracelet()
+    res.then((item) => {
+      if (item.status === 200) { this.id = item.obj }
+    }).catch()
+  },
+  methods: {
+    showpo () {
+      this.show = true
+    },
+    onSubmit () {
+      this.show = false
+      reqbindBracelet(this.value)
+      this.value = ''
+      setTimeout(() => {
+        var res = reqgetBracelet()
+        res.then((item) => {
+          if (item.status === 200) { this.id = item.obj }
+        }).catch()
+      }, 1000)
+    }
+  }
 }
 </script>
 
@@ -58,6 +97,12 @@ export default {
           font-size: 14px;
 }
        background-color: #fff;
+}
+.popup{
+  width: 200px;
+  height: 200px;
+  margin: 10px 20px;
+  padding: 10px;
 }
 .button{
   display: block;

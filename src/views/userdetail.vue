@@ -1,42 +1,46 @@
 <template>
   <div>
-    <div class="nav">
-      个 人 信 息
-  </div>
-  <van-cell-group inset>
-  <van-divider @click="show = true">
-    <img :src="userinfo.headPortrait" alt="" class="avatar" v-if="userinfo!=={}"/>
-  </van-divider>
-  <!-- <van-action-sheet
-  v-model="show"
-  :actions="actions"
-  cancel-text="取消"
-  close-on-click-action
-  @select="onSelect"
-  @cancel="onCancel"
-  /> -->
-  <input type="file" id="test">
-  <van-action-sheet v-model="show" :actions="actions" @select="onSelect">
-  <div class="content">
-    <!-- <p>上传头像</p> -->
-  <!-- <van-uploader :after-read="afterRead" /> -->
-  </div>
-</van-action-sheet>
+    <div class="nav">个 人 信 息</div>
+    <van-cell-group inset>
+      <van-divider @click="show = true">
+        <img
+          :src="userinfo.headPortrait"
+          alt=""
+          class="avatar"
+          v-if="userinfo !== {}"
+        />
+      </van-divider>
 
-  <van-field v-model="userinfo.name" label="姓名" />
-  <van-field v-model="userinfo.tel" label="手机号" />
-  <van-field v-model="userinfo.gender" label="性别" />
-  <van-field v-model="userinfo.nickname" label="用户名" />
-  <!-- 允许输入正整数，调起纯数字键盘 -->
-  <van-field v-model="userinfo.year" type="digit" label="年龄" />
-  <!-- 允许输入数字，调起带符号的纯数字键盘 -->
-  <van-field v-model="userinfo.height" type="number" label="身高" />
-  <van-field v-model="userinfo.weight" type="number" label="体重" />
-  <van-field v-model="userinfo.emergencyNumber" type="number" label="紧急联系人" />
-  <van-button round type="primary" size="normal" color="#007BFF" block @click="onSave" style="margin-top: 5px">保存</van-button>
+      <input type="file" id="test" />
+      <van-action-sheet v-model="show" :actions="actions" @select="onSelect">
+        <div class="content"></div>
+      </van-action-sheet>
 
-</van-cell-group>
-
+      <van-field v-model="userinfo.name" label="姓名" />
+      <van-field v-model="userinfo.tel" label="手机号" />
+      <van-field v-model="userinfo.gender" label="性别" />
+      <van-field v-model="userinfo.nickname" label="用户名" />
+      <!-- 允许输入正整数，调起纯数字键盘 -->
+      <van-field v-model="userinfo.year" type="digit" label="年龄" />
+      <!-- 允许输入数字，调起带符号的纯数字键盘 -->
+      <van-field v-model="bmi[bmi.length-1].height" type="number" label="身高" readonly/>
+      <van-field v-model="bmi[bmi.length-1].weight" type="number" label="体重" readonly/>
+      <van-field
+        v-model="userinfo.emergencyNumber"
+        type="number"
+        label="紧急联系人"
+      />
+      <van-button
+        round
+        type="primary"
+        size="normal"
+        color="#007BFF"
+        block
+        @click="onSave"
+        style="margin-top: 5px"
+        >保存</van-button
+      >
+    </van-cell-group>
   </div>
 </template>
 
@@ -48,33 +52,42 @@ export default {
   data () {
     return {
       show: false,
-      actions: [{ name: '查看头像' }, { name: '上传头像' }]
+      actions: [{ name: '上传头像' }]
     }
   },
   computed: {
-    ...mapState(['userinfo'])
+    ...mapState(['userinfo', 'bmi'])
   },
   methods: {
     comReqImg () {
       var input = document.getElementById('test')
-      var formdata = new FormData()
-      formdata.append('file', input.files[0])
-      reqUploadPortrait(formdata)
+      if (input.files[0]) {
+        var formdata = new FormData()
+        formdata.append('file', input.files[0])
+        reqUploadPortrait(formdata)
+        this.userinfo.headPortrait = this.getObjectURL(input.files[0])
+      }
+    },
+    getObjectURL (file) {
+      var url = null
+      // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+      if (window.createObjectURL !== undefined) { // basic
+        url = window.createObjectURL(file)
+      } else if (window.URL !== undefined) { // mozilla(firefox)
+        url = window.URL.createObjectURL(file)
+      } else if (window.webkitURL !== undefined) { // webkit or chrome
+        url = window.webkitURL.createObjectURL(file)
+      }
+      return url
     },
     inputImg () {
       var input = document.getElementById('test')
       input.click()
-      console.log(input.value)
     },
     onSave () {
-      var res = perfectInformation(this.userinfo)
+      perfectInformation(this.userinfo)
       this.comReqImg()
-      if (res.status === 200) {
-        Toast('操作成功')
-      }
-    },
-    onCancel () {
-      Toast('取消')
+      Toast('保存成功')
     },
     onSelect (item) {
       // 默认情况下点击选项时不会自动收起
@@ -84,24 +97,16 @@ export default {
         this.inputImg()
       }
       Toast(item.name)
-    },
-    afterRead (file) {
-      this.show = false
-      console.log(file.file)
-      reqUploadPortrait(file.file)
-      // 此时可以自行将文件上传至服务器
-      console.log(file)
     }
   }
-
 }
 </script>
 
 <style lang="less" scoped>
-#test{
+#test {
   visibility: hidden;
 }
-.nav{
+.nav {
   height: 46px;
   background-color: #007bffd5;
   text-align: center;
@@ -109,11 +114,11 @@ export default {
   color: #fff;
 }
 .avatar {
-    width: 60px;
-    height: 60px;
-    background-color: #fff;
-    border-radius: 50%;
-    margin-right: 10px;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 .content {
   text-align: center;

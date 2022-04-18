@@ -8,6 +8,28 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
+    <script>
+      mui.init({
+        keyEventBind: {
+          backbutton: true
+        }
+      });
+      var first = null;
+      mui.back = function() {
+        if (!first) {
+          first = new Date().getTime();
+          history.go(-1);
+          setTimeout(function() {
+            first = null;
+          }, 1000);
+        } else {
+          if (new Date().getTime() - first < 1000) {
+            plus.runtime.quit();
+          }
+        }
+      };
+      </script>
+
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

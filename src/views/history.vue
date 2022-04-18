@@ -16,16 +16,17 @@
     <van-calendar v-model="show"  @confirm="onConfirm" color='#007bffd5' :min-date="minDate" :max-date="maxDate"/>
     <div class="showcard">
       <span>
-        <p v-if="this.weekHistory.length">{{weekHistory.length}}天</p>
+        <p v-if="this.weekHistory.length"><span style="font-size: 1.3em">{{weekHistory.length}}</span> 天</p>
         <p class="min">本周驾驶天数</p>
       </span>
       <span>
-        <p v-if="this.weekHistory.length">{{this.drivingtime}}次</p>
+        <p v-if="this.weekHistory.length"> <span style="font-size: 1.3em">{{this.drivingtime}}</span> 次</p>
         <p class="min">本周驾驶次数</p>
       </span>
     </div>
     <div class="warn">
-      本周系统已保障您的安全{{this.safetime}}分钟，期间您闭眼{{this.eyesum}}次，您注意力不集中{{this.attentionsum}}次,您打哈欠{{this.yawnsum}}次
+      本周系统已保障您的安全 <span style="font-size: 1.3em">{{this.safetime}}</span> 分钟，期间您闭眼 <span style="font-size: 1.3em">{{this.eyesum}}</span> 次，
+      您注意力不集中 <span style="font-size: 1.3em">{{this.attentionsum}}</span> 次,您打哈欠<span style="font-size: 1.3em">{{this.yawnsum}}</span>次。
     </div>
     <br>
     <div>
@@ -39,7 +40,7 @@
        <div class="history">
       <p style="font-size:14px">{{weekHistory[nowpage][0].begin}}~{{weekHistory[nowpage][0].end}}</p>
       <van-divider />
-      <div style="display: flex">
+      <div class="itembox">
         <div style="margin-top: 11px">
           <van-icon name="logistics" size="30px"/>
         </div>
@@ -49,7 +50,7 @@
         </div>
       </div>
       <van-divider :style="{ padding: '0  0 0 30px'}"/>
-      <div style="display: flex">
+      <div class="itembox">
         <div style="margin-top: 11px">
           <van-icon name="closed-eye" size="30px"/>
         </div>
@@ -59,7 +60,7 @@
         </div>
       </div>
       <van-divider :style="{ padding: '0  0 0 30px'}"/>
-      <div style="display: flex">
+      <div class="itembox">
         <div style="margin-top: 11px">
           <van-icon name="bulb-o" size="30px"/>
         </div>
@@ -69,7 +70,7 @@
         </div>
       </div>
       <van-divider :style="{ padding: '0  0 0 30px'}"/>
-      <div style="display: flex">
+      <div class="itembox">
         <div style="margin-top: 11px">
           <van-icon name="warning-o" size="30px"/>
         </div>
@@ -78,6 +79,7 @@
           <p style="display: inline; margin-left: 10px">  {{weekHistory[nowpage][0].attention}}次</p>
         </div>
       </div>
+      <br>
       <!-- <van-divider :style="{ padding: '0  0 0 30px'}"/> -->
     </div>
       </router-link>
@@ -99,7 +101,7 @@ export default {
       endday: '',
       show: false,
       minDate: new Date(2021, 0, 1),
-      maxDate: new Date(2022, 11, 31),
+      maxDate: new Date(),
       safetime: 0,
       eyesum: 0,
       yawnsum: 0,
@@ -138,7 +140,7 @@ export default {
             type: 'bar',
             data: this.closeEye,
             itemStyle: {
-              color: 'rgb(100, 204, 245,0.8)'
+              color: 'rgb(100, 204, 245)'
             }
           },
           {
@@ -146,7 +148,7 @@ export default {
             type: 'bar',
             data: this.yawn,
             itemStyle: {
-              color: 'rgb(244, 177, 131,0.8)'
+              color: 'rgb(244, 177, 131)'
             }
           },
           {
@@ -154,7 +156,7 @@ export default {
             type: 'bar',
             data: this.attention,
             itemStyle: {
-              color: 'rgba(125, 255, 201, 0.8)'
+              color: '#38dfc8'
             }
           }
         ]
@@ -214,7 +216,7 @@ export default {
       }
     },
     nextpage () {
-      if (this.nowpage < this.weekHistory.length) {
+      if (this.nowpage < this.weekHistory.length - 1) {
         this.nowpage++
       }
     },
@@ -305,6 +307,10 @@ export default {
     font-size: 15px;
   }
 }
+.itembox{
+  display: flex;
+  height: 32px;
+}
 .history{
   margin: 10px;
   padding: 10px;
@@ -333,26 +339,6 @@ export default {
   border-radius: 10px;
   color: #fff;
   background-image: linear-gradient(to bottom right,  rgb(244, 177, 131), rgba(244, 177, 131,0.7));
-}
-.card{
-       border-radius: 10px;
-       width: auto;
-       height: 60px;
-       padding: 10px;
-       margin: 5px;
-       box-shadow:  1px 1px 1px #fafafa;
-       background-color: #fafafa;
-       div{
-         display: inline-block;
-         margin-left: 10px;
-         p{
-           font-size: 10px;
-           color: black;
-         }
-       }
-}
-.bbc{
-  background-color: rgba(125, 255, 201, 0.555);
 }
 .showcard{
   display: flex;

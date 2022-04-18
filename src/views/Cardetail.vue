@@ -3,7 +3,7 @@
     <div class="nav">
       车 辆 详 情
     </div>
-
+    <br>
     <!-- <div class="car">
           <div class="img"><router-link to="/user/detail1"><img src="@/assets/car1.png"/></router-link></div>
           <div class="img"><router-link to="/user/detail2"><img src="@/assets/car2.png"/></router-link></div>
@@ -37,7 +37,9 @@
 </div>
   <div>
     <br>
-      <van-button round type="primary" size="normal" color="#007BFF" block @click="add">新增车辆</van-button>
+      <div style="margin: 0 10px">
+        <van-button round type="primary" size="normal" color="#007BFF" block @click="add">新增车辆</van-button>
+      </div>
       <!-- <br>
       <van-button round type="primary" size="normal" color="red" block @click="Dialog">删除</van-button> -->
   </div>

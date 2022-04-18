@@ -3,27 +3,56 @@
     <div class="nav">
       车 载 设 备 详 情
     </div>
+    <br>
     <div class="card">
           <van-icon name="desktop-o"  color="black" size="20px" />
           <div>
             <p>设备品牌: ZB</p>
-            <p>设备型号: ZB-812</p>
+            <p>设备型号: ZB-{{y}}</p>
           </div>
           <van-icon name="cross"/>
 
 </div>
   <div>
     <br>
-      <van-button round type="primary" size="normal" color="#007BFF" block>新增设备</van-button>
-      <!-- <br>
-      <van-button round type="primary" size="normal" color="red" block @click="Dialog">删除</van-button> -->
+      <div style="margin: 0 10px">
+        <van-button round type="primary" size="normal" color="#007BFF" block @click="showpo">更换设备</van-button>
+      </div>
   </div>
+  <van-popup v-model="show" round>
+    <div class="popup">
+      <p>更换绑定设备</p>
+        <br>
+        <van-field v-model="value" placeholder="请输入id" />
+        <br>
+      <van-button round block type="info" native-type="submit" @click="onSubmit">提交</van-button>
+    </div>
+  </van-popup>
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      id: '',
+      show: false,
+      value: '',
+      y: '812'
 
+    }
+  },
+  created () {
+  },
+  methods: {
+    showpo () {
+      this.show = true
+    },
+    onSubmit () {
+      this.show = false
+      this.y = this.value
+    }
+  }
 }
 </script>
 
@@ -58,6 +87,12 @@ export default {
           font-size: 14px;
 }
        background-color: #fff;
+}
+.popup{
+  width: 200px;
+  height: 200px;
+  margin: 10px 20px;
+  padding: 10px;
 }
 .button{
   display: block;

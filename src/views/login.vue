@@ -4,12 +4,6 @@
     <div class="nav">
       登 录
     </div>
-<!-- <van-nav-bar
-  title="登录"
-  left-text="返回"
-  left-arrow
-  @click-left="onClickLeft"
-/> -->
     <div class="login">
  <van-form @submit="onSubmit">
   <van-field
@@ -36,6 +30,11 @@
   </div>
 </van-form>
   </div>
+  <div style="text-align:center">
+    <p>测试账号密码</p>
+    <p>手机号：18222155748</p>
+    <p>密码：123</p>
+  </div>
   </div>
 </template>
 
@@ -58,7 +57,7 @@ export default {
         this.$store.commit('ADDToken', result.obj)
         setTimeout(() => {
           this.$store.dispatch('GetUser')
-          this.$router.push('/user')
+          this.$router.replace('/user')
         }, 1000)
       } else {
         this.password = ''

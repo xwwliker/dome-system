@@ -18,7 +18,10 @@
 <script>
 export default {
   name: 'APP',
-  methods: {
+  mounted () {
+    if (this.$store.state.token === '') {
+      this.$router.replace('/login')
+    }
   }
 }
 </script>

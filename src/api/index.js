@@ -24,7 +24,17 @@ export const reqDrivingInformationByDay = (beginTimeS) => requests({ url: `/peac
 export const reqDrivingInformationByTime = (params) => requests({ url: `/peach/drivingInformation/getDrivingInformationByTime?beginTimeS=${params.beginTimeS}&endTimeS=${params.endTimeS}`, method: 'get' })
 // 获取最新驾驶记录
 export const reqDrivingInformationlast = () => requests({ url: '/peach/drivingInformation/getDrivingInformationLast', method: 'get' })
-// /peach/user/uploadPortrait
-export const reqUploadPortrait = (file) => requests({ url: '/peach/user/uploadPortrait', method: 'post', file })
-// /peach/health/getHealthByTime?beginTimeS=2022-03-08 12:31:00&endTimeS=2022-03-08 12:43:00
+// 上传头像
+export const reqUploadPortrait = (file) => requests({ url: '/peach/user/uploadPortrait', method: 'post', data: file })
+// 获取健康数据
 export const reqgetHealthByTime = (params) => requests({ url: `/peach/health/getHealthByTime?beginTimeS=${params.beginTimeS}&endTimeS=${params.endTimeS}`, method: 'get' })
+// 获取体重
+export const reqgetAllBmi = () => requests({ url: '/peach/bmi/getAllBmi', method: 'get' })
+// 上传体重
+export const requploadBmi = (data) => requests({ url: '/peach/bmi/uploadBmi', method: 'post', data })
+// 获取驾驶图片
+export const reqgetDPictureById = (params) => requests({ url: `/peach/drivingInformation/getDPictureById?did=${params}`, method: 'get' })
+// 获取手环id
+export const reqgetBracelet = () => requests({ url: '/peach/user/getBracelet', method: 'get' })
+// 绑定手环
+export const reqbindBracelet = (bracelet) => requests({ url: `/peach/user/bindBracelet?bracelet=${bracelet}`, method: 'post', params: { bracelet } })

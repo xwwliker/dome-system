@@ -21,7 +21,7 @@
           <van-icon name="contact" size="30px" color="#fff"/>
           <br>
           <div><p>个人信息</p>
-          <p v-if="userinfo.name">{{userinfo.gender}} {{userinfo.height}}厘米</p>
+          <p v-if="userinfo.name && bmi.length !== 0">{{userinfo.gender}} {{bmi[bmi.length-1].height}}厘米</p>
           </div>
         </div>
         </router-link>
@@ -50,7 +50,7 @@
           <van-icon name="service-o" size="30px" color="#fff"/>
           <br>
           <div><p>可穿戴设备</p>
-          <p v-if="userinfo.name">小米手环6</p>
+          <p v-if="userinfo.name">安徒生手环</p>
           </div>
         </div>
         </router-link>
@@ -58,31 +58,56 @@
        </div>
        <br>
        <van-cell-group class="action-card">
-         <van-cell icon="phone-o" title="联系客服" is-link />
-         <van-cell icon="setting-o" title="设置" is-link />
+         <van-cell icon="phone-o" title="联系客服" @click="show = true" is-link />
+         <van-cell icon="share-o" title="退出登录" is-link  @click="Dialog()" />
        </van-cell-group>
+       <van-popup v-model="show" round>
+    <div class="popup">
+      <p>联系客服</p>
+      <van-cell icon="phone-o" title="13036997541 热线1" />
+      <van-cell icon="phone-o" title="18222155748 热线2" />
+        <br>
+    </div>
+  </van-popup>
      </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { Dialog, Toast } from 'vant'
 export default {
   name: 'User',
   data () {
     return {
-      islogin: false
+      islogin: false,
+      show: false
     }
   },
   methods: {
+    Dialog () {
+      Dialog.confirm({
+        title: '确认退出登录？'
+      })
+        .then(() => {
+          // on confirm
+          this.$store.commit('reset')
+          Toast('退出成功')
+          this.$router.replace('/login')
+        })
+        .catch(() => {
+          // on cancel
+        })
+    }
   },
   computed: {
-    ...mapState(['token', 'cars', 'userinfo'])
+    ...mapState(['token', 'cars', 'userinfo', 'bmi'])
   },
   mounted () {
     if (this.token.length !== 0) {
       this.$store.dispatch('getLastUserHealth')
       this.$store.dispatch('GetUser')
       this.$store.dispatch('getAllCar')
+      this.$store.dispatch('getAllBmi')
       this.islogin = true
       if (this.userinfo.nickname === '') {
         this.$router.push('/userdetail')
@@ -94,6 +119,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.popup{
+  width: 200px;
+  height: 200px;
+  margin: 10px 20px;
+  padding: 10px;
+}
    .user-container {
      .user-card {
        background-color: #007bff;

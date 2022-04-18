@@ -11,21 +11,20 @@
       <p @click="nextday">后一天</p>
     </div>
     <van-calendar v-model="show"  @confirm="onConfirmday" color='#007bffd5' :min-date="minDate" :max-date="maxDate"/>
-      <div id="main" :style="{width: '100%', height: '300px'}"></div>
+      <div id="main" :style="{width: '95%', height: '300px', margin: '0 0 0 5%'}"></div>
       <div class="card" style="background-image: linear-gradient(to bottom right,  rgb(244, 177, 131), rgba(244, 177, 131,0.7));">
           <van-icon name="bar-chart-o" size="30px" color="#fff"/>
           <br>
           <div class="box">
             <div class="text">
               <p>本次最高：</p>
-              <p style="float:right">{{maxnumber}}%</p>
+              <p style="float:right">{{maxnumber}} %</p>
             </div>
-
             <br>
             <!-- <p style="float: right">{{minnumber}}%</p> -->
             <div class="text">
               <p>本次最低：</p>
-              <p style="float:right">{{minnumber}}%</p>
+              <p style="float:right">{{minnumber}} %</p>
             </div>
           </div>
     </div>
@@ -38,31 +37,31 @@
     </div>
 
     <van-calendar v-model="show"  @confirm="onConfirmweek" color='#007bffd5' :min-date="minDate" :max-date="maxDate"/>
-    <div id="week" :style="{width: '100%', height: '300px'}"></div>
+    <div id="week" :style="{width: '95%', height: '300px', margin: '0 0 0 5%'}"></div>
     <div class="card" style="background-image: linear-gradient(to bottom right,  rgb(244, 177, 131), rgba(244, 177, 131,0.7));">
           <van-icon name="bar-chart-o" size="30px" color="#fff"/>
           <br>
           <div class="box">
             <div class="text">
               <p>本周最高：</p>
-              <p style="float:right">{{maxnumber}}%</p>
+              <p style="float:right">{{maxnumber}} %</p>
             </div>
             <br>
             <!-- <p style="float: right">{{minnumber}}%</p> -->
             <div class="text">
               <p>本周最低：</p>
-              <p style="float:right">{{minnumber}}%</p>
+              <p style="float:right">{{minnumber}} %</p>
             </div>
           </div>
     </div>
     </van-tab>
     <van-tab title="月">
       <div class="calendar">
-        <p @click="previousweek">上一月</p>
+        <p @click="previousmonth">上一月</p>
         <p class="date">{{this.nowmonth}}</p>
-        <p @click="nextweek">下一月</p>
+        <p @click="nextmonth">下一月</p>
       </div>
-    <div id="month" :style="{width: '100%', height: '300px'}"></div>
+    <div id="month" :style="{width: '95%', height: '300px', margin: '0 0 0 5%'}"></div>
     </van-tab>
   </van-tabs>
 
@@ -90,7 +89,7 @@ export default {
       active: 0,
       show: false,
       minDate: new Date(2021, 0, 1),
-      maxDate: new Date(2022, 11, 31),
+      maxDate: new Date(),
       nowdate: '',
       startday: '',
       endday: '',
@@ -112,6 +111,10 @@ export default {
       var date = []
       var data = []
       option = {
+        grid: {
+          left: '1%',
+          containLabel: true
+        },
         title: {
           // text: this.lastHistory.drivingInformation.end.substring(0, 10)
         },
@@ -127,8 +130,10 @@ export default {
           }
         },
         yAxis: {
+          name: '%',
           boundaryGap: [0, '50%'],
           type: 'value',
+          max: 99,
           scale: true
         },
         series: [
@@ -175,6 +180,10 @@ export default {
       var date = []
       var data = []
       option = {
+        grid: {
+          left: '1%',
+          containLabel: true
+        },
         legend: {
           icon: 'rect'
         },
@@ -190,13 +199,14 @@ export default {
           }
         },
         yAxis: {
+          name: '%',
           boundaryGap: [0, '50%'],
           type: 'value',
           scale: true
         },
         series: [
           {
-            name: 'avg',
+            name: '平均值',
             type: 'line',
             symbol: 'none',
             // areaStyle: {
@@ -221,7 +231,7 @@ export default {
             data: data
           },
           {
-            name: 'max',
+            name: '最大值',
             type: 'line',
             symbol: 'none',
             // areaStyle: {
@@ -245,7 +255,7 @@ export default {
             data: data
           },
           {
-            name: 'min',
+            name: '最小值',
             type: 'line',
             symbol: 'none',
             // areaStyle: {
@@ -283,6 +293,10 @@ export default {
       var date = []
       var data = []
       option = {
+        grid: {
+          left: '1%',
+          containLabel: true
+        },
         title: {
           // text: this.lastHistory.drivingInformation.end.substring(0, 10)
         },
@@ -298,6 +312,7 @@ export default {
           }
         },
         yAxis: {
+          name: '%',
           boundaryGap: [0, '50%'],
           type: 'value',
           scale: true
@@ -420,16 +435,41 @@ export default {
       nextweek = new Date(nextweek)
       this.getCurrentWeekFirstDay(nextweek)
       this.getCurrentWeekLastDay(nextweek)
+    },
+    nextmonth () {
+      var arr = this.nowmonth.split('-')
+      if (Number(arr[1]) < 9) {
+        arr[1] = Number(arr[1]) + 1
+        arr[1] = '0' + arr[1] + ''
+      } else if (arr[1] === '12' || arr[1] === 12) {
+        arr[1] = '01'
+        arr[0] = Number(arr[0]) + 1
+      } else {
+        arr[1] = Number(arr[1]) + 1
+      }
+      this.nowmonth = arr.join('-')
+    },
+    previousmonth () {
+      var arr = this.nowmonth.split('-')
+      if (arr[1] === '01') {
+        arr[1] = '12'
+        arr[0] = Number(arr[0]) - 1
+      } else if (Number(arr[1]) < 11) {
+        arr[1] = Number(arr[1]) - 1
+        arr[1] = '0' + arr[1] + ''
+      } else {
+        arr[1] = Number(arr[1]) - 1
+      }
+      this.nowmonth = arr.join('-')
     }
   },
   watch: {
     dayHealth () {
       var date = []
       var data = []
-      var i = 0
       if (this.dayHealth[0]) {
         this.dayHealth[0].forEach((item) => {
-          date.push(i++)
+          date.push(item.time)
           data.push(item.bloodOxygen)
         })
       }
@@ -466,8 +506,7 @@ export default {
           this.maxnum()
         })
       } else if (val === 2) {
-        this.getCurrenMonth(new Date(2022, 3))
-        this.$store.dispatch('getMonthHealth', { beginTimeS: '2022-01-01 00:00:00', endTimeS: '2022-02-01 00:00:00' })
+        this.getCurrenMonth(new Date(2022, 0))
         this.$nextTick(function () {
           this.monthdrawLine()
         })
@@ -478,8 +517,10 @@ export default {
         this.$store.dispatch('getWeekHealth', { beginTimeS: this.startday + ' 00:00:00', endTimeS: this.endday + ' 23:59:59' })
       }
     },
-    nowmon () {
-
+    nowmonth () {
+      if (this.nowmonth !== '') {
+        this.$store.dispatch('getMonthHealth', { beginTimeS: this.nowmonth + '-01 00:00:00', endTimeS: this.nowmonth + '-31 23:59:59' })
+      }
     },
     weekHealth () {
       var date = []
